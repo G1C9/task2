@@ -1,0 +1,32 @@
+spring:
+
+  application:
+    name: task2
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/task2
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jooq:
+    enabled: true
+
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+
+  profiles:
+    active: jooq
+
+springdoc:
+
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
