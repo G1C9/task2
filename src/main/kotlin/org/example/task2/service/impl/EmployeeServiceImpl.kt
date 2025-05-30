@@ -22,7 +22,8 @@ class EmployeeServiceImpl(
 
     override fun findById(id: UUID): Employee {
         logger.info("GET $EMPLOYEE WITH $id")
-        return employeeRepository.findById(id).orElseThrow {
+        val result = employeeRepository.findById(id)
+        return result.orElseThrow {
             logger.error("$EMPLOYEE NOT FOUND WITH $id")
             IdNotFoundException(EMPLOYEE, id)
         }
