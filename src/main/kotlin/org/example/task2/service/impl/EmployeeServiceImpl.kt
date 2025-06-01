@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 import org.example.task2.constant.EntitiesConstant.EMPLOYEE
 import org.example.task2.exception.IdNotFoundException
+import java.util.Optional
 
 @Service
 class EmployeeServiceImpl(
@@ -20,12 +21,12 @@ class EmployeeServiceImpl(
         return employeeRepository.save(employee)
     }
 
-    override fun findById(id: UUID): Employee {
+    override fun findById(id: UUID): Optional<Employee> {
         logger.info("GET $EMPLOYEE WITH $id")
-        val result = employeeRepository.findById(id)
-        return result.orElseThrow {
-            logger.error("$EMPLOYEE NOT FOUND WITH $id")
-            IdNotFoundException(EMPLOYEE, id)
+        return employeeRepository.findById(id).also { optional ->
+            if (optional.isEmpty) {
+                logger.error("$EMPLOYEE NOT FOUND WITH $id")
+            }
         }
     }
 
@@ -38,6 +39,42 @@ class EmployeeServiceImpl(
         logger.info("FIND ALL EMPLOYEES BY THIS $position")
         val list = employeeRepository.findAllByPosition(position)
         return list.size
+    }
+
+    override fun findAll(): List<Employee> {
+        logger.info("FIND ALL EMPLOYEES")
+        return employeeRepository.findAll()
+    }
+
+    override fun findEmployeesWorkedMoreThan90Days(): List<Employee> {
+        logger.info("FIND ALL EMPLOYEES WHO WORKED MORE THAN 90 DAYS")
+        return employeeRepository.findEmployeesWorkedMoreThan90Days()
+    }
+
+    override fun deleteByName(name: String) {
+        logger.info("DELETE EMPLOYEE BY DEPARTMENT NAME")
+        employeeRepository.deleteByName(name)
+    }
+
+    override fun deleteAllByName(name: String) {
+        logger.info("DELETE ALL EMPLOYEES BY DEPARTMENT NAME")
+        employeeRepository.deleteAllByName(name)
+    }
+
+    override fun update(employee: Employee, id: UUID): Employee {
+        return employeeRepository.findById(id)
+            .map{ existingEmployee ->
+                val updatedEmployee = existingEmployee.apply {
+                    name = employee.name
+                    salary = employee.salary
+                    dateOfDepartment = employee.dateOfDepartment
+                    department = employee.department
+                }.also {
+                    logger.info("UPDATE EMPLOYEE WITH ID: $id")
+                }
+                employeeRepository.save(updatedEmployee)
+            }
+            .orElseThrow{ IdNotFoundException(EMPLOYEE, id) }
     }
 
 }

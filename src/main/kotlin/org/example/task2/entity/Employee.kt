@@ -8,9 +8,12 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
+import java.time.LocalDate
 import java.util.UUID
 
 @Entity
+@Table(name = "employees")
 class Employee {
 
     @Id
@@ -22,6 +25,9 @@ class Employee {
 
     @Column(nullable = false)
     var salary: Int? = null
+
+    @Column(name = "date_of_department", nullable = false)
+    var dateOfDepartment: LocalDate? = null
 
     @ManyToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "department_id", nullable = false)

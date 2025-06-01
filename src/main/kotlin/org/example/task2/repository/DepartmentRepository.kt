@@ -8,8 +8,10 @@ import java.util.UUID
 @Repository
 interface DepartmentRepository {
 
-    fun deleteAll()
-
     fun findById(id: UUID?): Optional<Department>
+
+    fun deleteById(id: UUID)
+
+    fun save(department: Department): Department
 
 }

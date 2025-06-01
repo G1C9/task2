@@ -16,4 +16,12 @@ interface EmployeeRepository {
 
     fun findAllByPosition(position: String): List<Employee>
 
+    fun findAll(): List<Employee>
+
+    fun findEmployeesWorkedMoreThan90Days(): List<Employee>
+
+    fun deleteByName(name: String)
+
+    fun deleteAllByName(name: String)
+
 }
