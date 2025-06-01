@@ -22,15 +22,16 @@ class EmployeeControllerImpl(
             id = employee.id!!,
             name = employee.name!!,
             salary = employee.salary!!,
+            dateOfDepartment = employee.dateOfDepartment!!,
             departmentId = employee.department!!.id!!
         )
     }
 
     private fun dtoToEntity(dto: EmployeeDto, department: Department): Employee {
         return Employee().apply {
-            id = dto.id
             name = dto.name
             salary = dto.salary
+            dateOfDepartment = dto.dateOfDepartment
             this.department = department
         }
     }
@@ -65,12 +66,12 @@ class EmployeeControllerImpl(
         return employeeService.findEmployeesWorkedMoreThan90Days().map { entityToDto(it) }
     }
 
-    override fun deleteByName(name: String) {
-        employeeService.deleteByName(name)
+    override fun deleteByDepartmentName(id: UUID, name: String) {
+        employeeService.deleteByDepartmentName(id, name)
     }
 
-    override fun deleteAllByName(name: String) {
-        employeeService.deleteAllByName(name)
+    override fun deleteAllByDepartmentName(name: String) {
+        employeeService.deleteAllByDepartmentName(name)
     }
 
     override fun update(employeeDto: EmployeeDto, id: UUID): EmployeeDto {

@@ -1,7 +1,6 @@
 package org.example.task2.controller
 
 import org.example.task2.dto.EmployeeDto
-import org.example.task2.entity.Employee
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -39,13 +38,13 @@ interface EmployeeController {
     @GetMapping("/90days")
     fun findEmployeesWorkedMoreThan90Days(): List<EmployeeDto>
 
+    @DeleteMapping("/name/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteByDepartmentName(@PathVariable id: UUID, @RequestParam name: String)
+
     @DeleteMapping("/name")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteByName(@RequestParam name: String)
-
-    @DeleteMapping("/all/name")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteAllByName(@RequestParam name: String)
+    fun deleteAllByDepartmentName(@RequestParam name: String)
 
     @PutMapping("/{id}")
     fun update(employee: EmployeeDto, @PathVariable id: UUID): EmployeeDto

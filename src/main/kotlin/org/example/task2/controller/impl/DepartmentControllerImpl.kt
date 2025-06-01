@@ -22,7 +22,6 @@ class DepartmentControllerImpl(
 
     private fun dtoToEntity(dto: DepartmentDto): Department {
         return Department().apply {
-            id = dto.id
             name = dto.name
             position = dto.position
         }

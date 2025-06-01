@@ -1,5 +1,6 @@
 package org.example.task2.service.impl
 
+import jakarta.transaction.Transactional
 import org.example.task2.entity.Employee
 import org.example.task2.repository.EmployeeRepository
 import org.example.task2.service.EmployeeService
@@ -16,20 +17,24 @@ class EmployeeServiceImpl(
 
     val logger = org.slf4j.LoggerFactory.getLogger(this::class.java)
 
+    @Transactional
     override fun create(employee: Employee): Employee {
         logger.info("CREATE $EMPLOYEE")
         return employeeRepository.save(employee)
     }
 
     override fun findById(id: UUID): Optional<Employee> {
-        logger.info("GET $EMPLOYEE WITH $id")
         return employeeRepository.findById(id).also { optional ->
             if (optional.isEmpty) {
                 logger.error("$EMPLOYEE NOT FOUND WITH $id")
             }
+            else {
+                logger.info("GET $EMPLOYEE WITH $id")
+            }
         }
     }
 
+    @Transactional
     override fun deleteById(id: UUID) {
         logger.info("DELETE $EMPLOYEE WITH $id")
         employeeRepository.deleteById(id)
@@ -51,16 +56,19 @@ class EmployeeServiceImpl(
         return employeeRepository.findEmployeesWorkedMoreThan90Days()
     }
 
-    override fun deleteByName(name: String) {
+    @Transactional
+    override fun deleteByDepartmentName(id: UUID, name: String) {
         logger.info("DELETE EMPLOYEE BY DEPARTMENT NAME")
-        employeeRepository.deleteByName(name)
+        employeeRepository.deleteByDepartmentName(id, name)
     }
 
-    override fun deleteAllByName(name: String) {
+    @Transactional
+    override fun deleteAllByDepartmentName(name: String) {
         logger.info("DELETE ALL EMPLOYEES BY DEPARTMENT NAME")
-        employeeRepository.deleteAllByName(name)
+        employeeRepository.deleteAllByDepartmentName(name)
     }
 
+    @Transactional
     override fun update(employee: Employee, id: UUID): Employee {
         return employeeRepository.findById(id)
             .map{ existingEmployee ->

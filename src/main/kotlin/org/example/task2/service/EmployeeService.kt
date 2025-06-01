@@ -20,9 +20,9 @@ interface EmployeeService {
 
     fun findEmployeesWorkedMoreThan90Days(): List<Employee>
 
-    fun deleteByName(name: String)
+    fun deleteByDepartmentName(id: UUID, name: String)
 
-    fun deleteAllByName(name: String)
+    fun deleteAllByDepartmentName(name: String)
 
     fun update(employee: Employee, id: UUID): Employee
 
