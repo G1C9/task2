@@ -35,11 +35,23 @@ class JooqDepartmentRepository(
     }
 
     override fun deleteById(id: UUID) {
-        TODO("Not yet implemented")
+        dslContext.deleteFrom(DEPARTMENTS)
+            .where(DEPARTMENTS.ID.eq(id))
+            .execute()
     }
 
     override fun save(department: Department): Department {
-        TODO("Not yet implemented")
+        val idToSave = department.id ?: UUID.randomUUID()
+        val record = dslContext.insertInto(
+            DEPARTMENTS, DEPARTMENTS.ID, DEPARTMENTS.NAME, DEPARTMENTS.POSITION
+        ).values(idToSave, department.name, department.position)
+            .onDuplicateKeyUpdate()
+            .set(DEPARTMENTS.NAME, department.name)
+            .set(DEPARTMENTS.POSITION, department.position)
+            .returning()
+            .fetchOne() ?: throw IllegalStateException("Cannot save or update department")
+
+        return toDepartment(record)
     }
 
 }
